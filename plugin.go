@@ -13,7 +13,16 @@ import (
 
 type CollectPayloadDataPlugin struct{}
 
-func (p *CollectPayloadDataPlugin) Init() models.ActionDetails {
+func (p *CollectPayloadDataPlugin) Init() models.Plugin {
+	return models.Plugin{
+		Name:    "Collect Payload Data",
+		Type:    "action",
+		Version: "1.0.1",
+		Creator: "JustNZ",
+	}
+}
+
+func (p *CollectPayloadDataPlugin) Details() models.ActionDetails {
 	params := []models.Param{
 		{
 			Key:         "PayloadID",
