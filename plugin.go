@@ -8,6 +8,7 @@ import (
 	"gitlab.justlab.xyz/alertflow-public/runner/pkg/models"
 	"gitlab.justlab.xyz/alertflow-public/runner/pkg/payloads"
 
+	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -22,7 +23,7 @@ func (p *CollectPayloadDataPlugin) Init() models.Plugin {
 	}
 }
 
-func (p *CollectPayloadDataPlugin) Details() models.ActionDetails {
+func (p *CollectPayloadDataPlugin) Details() models.PluginDetails {
 	params := []models.Param{
 		{
 			Key:         "PayloadID",
@@ -38,15 +39,17 @@ func (p *CollectPayloadDataPlugin) Details() models.ActionDetails {
 		log.Error(err)
 	}
 
-	return models.ActionDetails{
-		Name:        "Collect Payload Data",
-		Description: "Collects Payload data from AlertFlow",
-		Icon:        "solar:letter-opened-broken",
-		Type:        "collect_payload_data",
-		Category:    "Data",
-		Function:    p.Execute,
-		IsHidden:    true,
-		Params:      json.RawMessage(paramsJSON),
+	return models.PluginDetails{
+		Action: models.ActionDetails{
+			Name:        "Collect Payload Data",
+			Description: "Collects Payload data from AlertFlow",
+			Icon:        "solar:letter-opened-broken",
+			Type:        "collect_payload_data",
+			Category:    "Data",
+			Function:    p.Execute,
+			IsHidden:    true,
+			Params:      json.RawMessage(paramsJSON),
+		},
 	}
 }
 
@@ -105,5 +108,7 @@ func (p *CollectPayloadDataPlugin) Execute(execution models.Execution, flow mode
 
 	return map[string]interface{}{"payload": payload}, true, false, false, false
 }
+
+func (p *CollectPayloadDataPlugin) Handle(context *gin.Context) {}
 
 var Plugin CollectPayloadDataPlugin
